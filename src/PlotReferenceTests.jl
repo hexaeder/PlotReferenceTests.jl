@@ -55,6 +55,8 @@ function _save_and_compare(name::String, fig)
         newversion = replace(refpath, r".png$" => s"+.png")
         if score > THREASHOLD
             printstyled("Test Passed"; color=:green, bold=true)
+            # remove the tmp file
+            rm(temppath)
             # if the test succeds, delete the newversion if it was there
             if isfile(newversion)
                 printstyled(": Remove conflicting version $(name)+.png"; color=:green, bold=true)
