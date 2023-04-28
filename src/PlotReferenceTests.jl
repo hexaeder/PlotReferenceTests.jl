@@ -34,12 +34,14 @@ macro reftest(name, fig)
     quote
         _f = $(esc(fig))
         result = _save_and_compare($(esc(name)), _f)
-        if Test.get_testset() !== Test.FallbackTestSet()
+        if _intestset()
             @test result
         end
         _f
     end
 end
+
+_intestset() = Test.get_testset() !== Test.FallbackTestSet()
 
 function _save_and_compare(name::String, fig)
     @assert !isempty(REFDIR[]) "Please set REFDIR[]!"
@@ -54,9 +56,9 @@ function _save_and_compare(name::String, fig)
         score = compare(load(refpath), load(tmppath))
         newversion = replace(refpath, r".png$" => s"+.png")
         if score > THREASHOLD
-            printstyled("Test Passed"; color=:green, bold=true)
+            _intestset() || printstyled("Test Passed"; color=:green, bold=true)
             # remove the tmp file
-            rm(temppath)
+            rm(tmppath)
             # if the test succeds, delete the newversion if it was there
             if isfile(newversion)
                 printstyled(": Remove conflicting version $(name)+.png"; color=:green, bold=true)
