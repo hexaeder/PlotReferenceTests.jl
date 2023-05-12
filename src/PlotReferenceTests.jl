@@ -64,7 +64,7 @@ function _save_and_compare(name::String, fig)
                 printstyled(": Remove conflicting version $(name)+.png"; color=:green, bold=true)
                 rm(newversion)
             end
-            println()
+            _intestset() || println()
             return true
         else
             LAST[] = name
